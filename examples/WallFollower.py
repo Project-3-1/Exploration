@@ -66,13 +66,11 @@ if __name__ == '__main__':
         # 1. Takes off (1st step) when the commander is created. Hovers at 1 m
         with MotionCommander(scf, 0.4) as motion_commander:
             with Multiranger(scf) as multiranger:
-                time.sleep(1)
-
                 keep_flying = True
                 ranges = ["front", "left", "right", "back"]
                 switch = "next_is_right"
                 HEIGHT = 0.4  # meter
-                VELOCITY = 0.5
+                VELOCITY = 0.2
                 max_rate = 0.2
                 field_of_view = 0.5
                 distance_parallel_to_wall_btw_turns = 0.5
@@ -189,8 +187,7 @@ if __name__ == '__main__':
                         motion_commander.take_off()
 
                     elif state == "FORWARD":
-                        time.sleep(1)
-                        motion_commander.start_forward()
+                        motion_commander.start_forward(VELOCITY)
 
                     elif state == "HOVER":
                         time.sleep(1)
