@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.ERROR)
 
 # Determine whether the drone is closed to an obstacle or not. Let's say the threshold is 0.3
 def is_close(range):
-    MIN_DISTANCE = 0.3  # meters
+    MIN_DISTANCE = 0.5  # meters
     if range is None:
         return False
     else:
@@ -69,12 +69,12 @@ if __name__ == '__main__':
             with Multiranger(scf) as multiranger:
                 print("took off")
                 keep_flying = True
-                switch = "next_is_right"
                 HEIGHT = 0.5  # meter
                 VELOCITY = 0.2
                 is_parallel_to_first_wall = False
                 first_wall_is_found = False
                 start_following_target = False
+                targetFound = False
 
                 while(keep_flying):
                     # First starting technique: Doesn't check the surroundings when hovering after the take off.
@@ -118,26 +118,29 @@ if __name__ == '__main__':
                     if not is_close(multiranger.front):
                         motion_commander.start_forward(VELOCITY)
 
-                    while not target_is_found():
+                    while not targetFound:
+                        print("second loop")
                         if is_close(multiranger.front):
                             motion_commander.stop()
 
                             if not is_close(multiranger.left):
                                 motion_commander.turn_left(90)
+                                print("turns 90 degrees")
                                 time.sleep(0.2)
 
                             if not is_close(multiranger.front):
+                                print("Goes forward")
                                 motion_commander.start_forward(VELOCITY)
 
-                    if target_is_found():
-                        print('The drone has found the target!')
-                        motion_commander.stop()
-                        motion_commander.land()
-                        keep_flying = False
+                if target_is_found():
+                    print('The drone has found the target!')
+                    motion_commander.stop()
+                    motion_commander.land()
+                    keep_flying = False
 
-                    if not keep_flying:
-                        print("security")
-                        motion_commander.stop()
-                        motion_commander.land()
+                if not keep_flying:
+                    print("security")
+                    motion_commander.stop()
+                    motion_commander.land()
 
-                    print('Demo terminated!')
+                print('Demo terminated!')
