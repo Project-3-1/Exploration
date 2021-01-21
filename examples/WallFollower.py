@@ -66,6 +66,7 @@ if __name__ == '__main__':
         # 1. Takes off (1st step) when the commander is created. Hovers at 1 m
         with MotionCommander(scf, 0.4) as motion_commander:
             with Multiranger(scf) as multiranger:
+                time.sleep(1)
 
                 keep_flying = True
                 ranges = ["front", "left", "right", "back"]
@@ -103,7 +104,7 @@ if __name__ == '__main__':
                             motion_commander.stop()
                             time.sleep(1)
                             state = transition("TURN_TO_FIND_WALL")
-                            
+
 
                     elif state == "HOVER":
                         print(state)
